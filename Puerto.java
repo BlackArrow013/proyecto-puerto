@@ -25,47 +25,62 @@ public class Puerto
     /**
      * Muestra por patalla el estado de cada amarre.
      */
-    public void verEstadoAmarre()
+    public void verEstadoAmarres()
     {
-        for (int i = 0; i < amarres.length; i++) {
-            if(amarres[i] == null) {
-                System.out.println("El amarre " + amarres[i] + " está vacío.");
-            }
-            else {
-                System.out.println("El amarre " + amarres[i] + " tiene barcos.");
-            }
-        }
+        System.out.println(this);
     }
-    
+
     /**
      * Indica qué barco ha sido alquilado y cuánto tiempo. Devuelve también el coste del alquiler.
      * @param numDias - se introduce un entero que indica el número de días que se alquilará el barco.
      * @param barco - se introduce el barco que se va a alquilar.
-     * @return precioAlquiler - devuelve el precio del alquiler.
+     * @return precioAlquiler - devuelve el precio del alquiler siempre que haya amarres libres. Si no los hay devuelve -1.
      */
-    public int alquilarAmarre(int numDias, Barco barco)
+    public double alquilarAmarre(int numDias, Barco barco)
     {        
-        int precioAlquiler = 0;
+        double precioAlquiler = -1;
+        for (int i = 0; i < amarres.length; i++) {
+            if (amarres[i] == null) {
+                amarres[i] = new Alquiler(numDias, barco);
+                precioAlquiler = amarres[i].getPrecio();
+                i = 4;
+            }
+        }
         return precioAlquiler;
     }
-    
+
     /**
      * El barco alquilado se liquida, y se coge del amarre indicado por parámetro.
      * @param numAmarre - se indica el número del amarre desde donde se coge el barco.
-     * @return - devuelve el precio del alquiler.
+     * @return precioAlquiler - devuelve el precio del alquiler. Si no se puede efectuar la operación devuelve -1.
      */
-    public int liquidarAlquilerAmarre(int numAmarre)
+    public double liquidarAlquilerAmarre(int numAmarre)
     {
-        int precioAlquiler = 0;
+        double precioAlquiler = -1;
+        if (numAmarre < 4) {
+            if (amarres[numAmarre] != null) {
+                precioAlquiler = amarres[numAmarre].getPrecio();
+                amarres[numAmarre] = null;
+            }
+        }
         return precioAlquiler;
     }
-    
+
     /**
      * Devuelve toda la información de la clase Puerto.
      * return - toda la información de la clase Puerto.
      */
     public String toString()
     {
-        return " ";
+        String aDevolver = "";
+        for (int i = 0; i < amarres.length; i++) {
+            if(amarres[i] == null) {
+                aDevolver = "El amarre " + amarres[i] + " está disponible.";
+            }
+            else {
+                aDevolver = "El amarre " + amarres[i] + " tiene barcos.";
+            }
+        }
+        return aDevolver;
     }
 }
